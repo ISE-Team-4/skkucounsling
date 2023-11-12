@@ -223,6 +223,23 @@ class CounselingApplications(APIView):
         Response(res,status=status.HTTP_200_OK)
         
         
+class CounselingApplications(APIView):
+    # 승인되지 않은 상담 신청서 전체 반환
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        res = {}
+        if not user.is_authenticated:
+            res['error'] = "로그인이 필요합니다."
+            return Response(res, status=status.HTTP_401_UNAUTHORIZED)
+        if user.user_type != 'counselor':
+            res['error'] = "상담사가 아닙니다."
+            return Response(res, status=status.HTTP_401_UNAUTHORIZED)
+
+        counseling_application = CounselingApplication.objects.filter(approved=False)
+        res['counseling_application'] = CounselingApplicationSerializer(counseling_application,many=True).data
+        Response(res,status=status.HTTP_200_OK)
+        
+        
 class CounselingApplicationFormalApproval(APIView):
     #상담 신청서 승인을 위해 상담사 상담 스케줄 반환 + 상담사에게 자동으로 상담 요일 추천
     def get(self, request, *args, **kwargs):
@@ -248,21 +265,29 @@ class CounselingApplicationFormalApproval(APIView):
         
         #학생의 선호 상담 시간을 바탕으로 자동으로 상담 날짜 추천
         date_dict = {0:'MON',1:'TUE',2:'WED',3:'THU',4:'FRI',5:'SAT',6:'SUN'}
-        for prefertimeslot in counseling_prefertimeslots: #학생이 선호하는 timeslot 마다
-            day,time = prefertimeslot.timeslot[:3],prefertimeslot[3:]   #day(요일)와 time(시간) 분리
-            date = datetime.datetime.today() + datetime.timedelta(days=1) #현재 날짜 다음날부터 day(선호 요일)과 일치하는 요일인 날짜 선택
-            for i in range(7):
-                if date_dict[date.weekday()] == day:
-                    break
-                else:
-                    date += datetime.timedelta(days=1)
-            for i in range(5): # 해당 날짜에 상담사의 상담 일정이 없으면 추천, 있으면 다음 주도 확인, 한달(5주) 안에 해당 날짜 없으면 추천 포기
+        date = datetime.datetime.today() + datetime.timedelta(days=1)
+        for i in range(5): #한달(5주) 안에 해당 날짜 없으면 추천 포기
+            date += datetime.timedelta(days=7*i)
+            for prefertimeslot in counseling_prefertimeslots.timeslot: #학생이 선호하는 timeslot 마다     
+                temp_date = date           
+                day,time = prefertimeslot.timeslot[:3],prefertimeslot.timeslot[3:]   #day(요일)와 time(시간) 분리
+                 #현재 날짜 다음날부터 day(선호 요일)과 일치하는 요일인 날짜 선택
+                for i in range(7):
+                    if date_dict[date.weekday()] == day:
+                        break
+                    else:
+                        date += datetime.timedelta(days=1)
+                # 해당 날짜에 상담사의 상담 일정이 없으면 추천, 있으면 패스
+                check = False 
                 for counseling_schedule in counseling_schedules:
-                    if counseling_schedule.date.date() != date.date():
-                        if counseling_schedule.timeslot[3:] != time:
-                            res['auto_recommend'] = {'date':date.date(),'time':time}
-                            return Response(res,status=status.HTTP_200_OK)
-                date += datetime.timedelta(days=7)
+                    if counseling_schedule.session_date.date() == date.date():
+                        if counseling_schedule.session_timeslot[3:] == time:
+                            check = True
+                            break
+                if(not check):
+                    res['auto_recommend'] = {'date':date.date(),'time':time}
+                    return Response(res,status=status.HTTP_200_OK)
+                date = temp_date
         res['auto_recommend'] = 'None'
         return Response(res,status=status.HTTP_200_OK)
 
