@@ -9,6 +9,7 @@ import SignupDonePage from "./components/pages/SignupDonePage";
 import StudentMainPage from "./components/pages/StudentMainPage";
 import StudentApplyPage from "./components/pages/StudentApplyPage";
 import CounselingAdminPage from "./components/pages/CounselingAdminPage/CounselingAdminPage";
+import { loginStore } from "./dataflow/store";
 
 function App() {
   return (
@@ -19,14 +20,28 @@ function App() {
             {/**
              * 페이지를 라우팅 테이블에 등록해주세요.
              */}
-            <Route path="/signup" element={<SignupPage />} />
+            <Route path="/signuppage" element={<SignupPage />} />
             <Route path="/" element={<MainPage />} />
-            <Route path="/calendar" element={<CalendarTest />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signupdone" element={<SignupDonePage />} />
             <Route path="/student/home" element={<StudentMainPage />} />
             <Route path="/student/application" element={<StudentApplyPage />} />
             <Route path="/admin" element={<CounselingAdminPage />} />
+            {loginStore.loginSuccess ? (
+              <>
+                <Route path="/calendar" element={<CalendarTest />} />
+
+                <Route path="/student/home" element={<StudentMainPage />} />
+                <Route
+                  path="/student/application"
+                  element={<StudentApplyPage />}
+                />
+              </>
+            ) : (
+              <>
+                <Route path="/*" element={<LoginPage />} />
+              </>
+            )}
           </Routes>
         </Router>
       </ChakraProvider>
