@@ -62,7 +62,7 @@ class CounselingJournalStudent(APIView):
         schedule_id = request.GET.get('schedule_id')
         
         counseling_journals = CounselingJournals.objects.filter(counseling_schedule=schedule_id)
-        res['counseling_journals'] = CounselingScheduleSerializer(counseling_journals, many=True).data
+        res['counseling_journals'] = CounselingJournalsSerializer(counseling_journals, many=True).data
         return Response(res, status=status.HTTP_200_OK)
     
     
