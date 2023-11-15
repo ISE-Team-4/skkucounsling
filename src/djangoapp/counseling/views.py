@@ -185,14 +185,15 @@ class CounselingJournalCounselor(APIView):
             res['error'] = "상담사가 아닙니다."
             return Response(res, status=status.HTTP_406_NOT_ACCEPTABLE)
         
-        schedule_id = request.GET.get('schedule_id')
+        schedule_id = request.data.get('schedule_id')
         
         if schedule_id is None: # 요청에 schedule_id 유무 체크
             res['error'] = "잘못된 요청입니다."
             return Response(res, status=status.HTTP_406_NOT_ACCEPTABLE)
         
-        counseling_journals = CounselingJournals.objects.get(counseling_schedule=schedule_id)
-        res['counseling_journals'] = CounselingScheduleSerializer(counseling_journals).data
+        counseling_schedule = CounselingSchedule.objects.get(id=schedule_id)
+        counseling_journals = CounselingJournals.objects.get(counseling_schedule=counseling_schedule)
+        res['counseling_journals'] = CounselingJournalsSerializer(counseling_journals).data
         
         return Response(res, status=status.HTTP_200_OK)
     
@@ -370,6 +371,13 @@ class CounselingApplicationApproval(APIView):
              )
         counseling_schedule.save()
 
+        counseling_journals = \
+            CounselingJournals(
+                counseling_schedule=counseling_schedule,
+                feedback=""
+            )
+        counseling_journals.save()
+
         return Response(status=status.HTTP_200_OK)
 
 
@@ -432,6 +440,13 @@ class CounselingScheduleAdd(APIView):
                 session_status='Yet'
             )
         counseling_schedule.save()
+
+        counseling_journals = \
+            CounselingJournals(
+                counseling_schedule=counseling_schedule,
+                feedback=""
+            )
+        counseling_journals.save()
 
         return Response(status=status.HTTP_200_OK)
     
