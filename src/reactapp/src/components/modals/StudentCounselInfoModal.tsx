@@ -63,7 +63,6 @@ const StudentCounselInfoModal = ({
             />
           </HStack>
         </ModalHeader>
-
         <ModalBody>
           <VStack
             style={{
