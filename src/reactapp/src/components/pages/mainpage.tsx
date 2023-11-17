@@ -10,6 +10,8 @@ import IcTasks from "../../resources/mainpage/ic_tasks.png";
 import IcCounseling from "../../resources/mainpage/ic_counseling.png";
 import IcDocument from "../../resources/mainpage/ic_document.png";
 import { useNavigate } from "react-router";
+import { cookieManager } from "../../dataflow/remote/CookieManager";
+import { ACCOUNT_TYPE } from "../../const/RemoteConst";
 
 const SlideItem = ({
   image,
@@ -65,7 +67,6 @@ const SlideItem = ({
 
 const MainPage = observer(() => {
   const store = mainStore;
-  const navigation = useNavigate();
   return (
     <VStack
       style={{
@@ -73,44 +74,7 @@ const MainPage = observer(() => {
         overflow: "hidden",
       }}
     >
-      <Appbar>
-        <Button color="white" variant="link" size="lg">
-          HOME
-        </Button>
-        {loginStore.loginSuccess ? (
-          <Button
-            color="white"
-            variant="link"
-            size="lg"
-            onClick={() => loginStore.logout()}
-          >
-            로그아웃
-          </Button>
-        ) : (
-          <>
-            <Button
-              color="white"
-              variant="link"
-              size="lg"
-              onClick={() => {
-                navigation("/signuppage");
-              }}
-            >
-              SIGNUP
-            </Button>
-            <Button
-              color="white"
-              variant="link"
-              size="lg"
-              onClick={() => {
-                navigation("/login");
-              }}
-            >
-              LOGIN
-            </Button>
-          </>
-        )}
-      </Appbar>
+      <Appbar/>
 
       <HStack
         style={{
