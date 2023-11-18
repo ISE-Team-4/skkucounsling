@@ -12,7 +12,7 @@ class Request {
   method: string;
   headers?: Headers;
   body?: any;
-  params?: [string: any];
+  params?: { [key: string]: any };
   type = "application/json";
   formBody?: FormData;
 
@@ -44,7 +44,7 @@ class Request {
     return this;
   };
 
-  addParams = (params: [string: any]) => {
+  addParams = (params: { [key: string]: any }) => {
     this.params = params;
     return this;
   };
