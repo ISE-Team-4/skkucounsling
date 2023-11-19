@@ -1,9 +1,9 @@
-interface ICounselingStudent {
-  id: number;
-  counseling_application: ICounselingApplication;
-  student: number;
-  counselor: number;
-}
+export type ICounselingStudent = {
+  id: number,
+  counseling_application: ICounselingApplication,
+  student: number,
+  counselor: number,
+};
 
 interface ICounselingApplication {
   id: number;
@@ -28,3 +28,12 @@ interface IApplicationForm {
 }
 
 export type { ICounselingStudent, ICounselingApplication, IApplicationForm };
+
+export type ICounselingSchedule = {
+  id: number,
+  counseling: number,
+  session_number: number,
+  session_date: string,
+  session_timeslot: string,
+  session_status: string,
+};
