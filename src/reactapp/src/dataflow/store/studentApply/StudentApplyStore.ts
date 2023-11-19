@@ -1,5 +1,6 @@
 import { makeAutoObservable } from "mobx";
 import { remote } from "../../remote/RemoteSource";
+import { IApplicationForm } from "../../interface/counseling";
 
 const APPLY_FIELD = {
   APPLICATION: "application",
@@ -24,6 +25,19 @@ interface iStudentApplyStore {
 
 class StudentApplyStore implements iStudentApplyStore {
   currentForm: FormData = new FormData();
+  application: IApplicationForm={
+    id: 0,
+    student: 0,
+    application_file: null,
+    applied_at: "",
+    approved: false,
+    denied: false,
+    counseling_preferfields: [],
+    counseling_prefertimeslots: [],
+    counseling_type: "",
+    test_date: "",
+    test_timeslot: ""
+  };
 
   getCurrentFormField(): FormData {
     return this.currentForm;

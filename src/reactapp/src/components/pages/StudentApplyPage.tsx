@@ -63,7 +63,6 @@ const StudentApplyPage = observer(() => {
 
   // 신청하기 버튼 클릭 -> form 데이터 검증 후 재확인 모달 열기
   const ClickApply = () => {
-    let f=document.querySelector("#application");
     if(!concent) alert("개인정보 수집·이용과 민감정보 처리에 동의가 필요합니다.");
     else if(!['personal_1','personal_5','personal_10'].includes(type)) alert("상담 종류를 선택해주세요.");
     else if(fields.length<1) alert("상담 분야를 하나 이상 선택해주세요.");
