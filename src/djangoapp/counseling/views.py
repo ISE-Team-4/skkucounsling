@@ -49,7 +49,7 @@ class CounselingApplicationStudent(APIView):
             counseling_preferfields = CounselingPreferfield.objects.filter(counseling_application=counseling_application['id'])
             counseling_application['counseling_preferfields'] = CounselingPreferfieldSerializer(counseling_preferfields, many=True).data
         
-        res['couseling_application'] = counseling_applications
+        res['counseling_applications'] = counseling_applications
 
         return Response(res,status=status.HTTP_200_OK)
         
@@ -139,6 +139,7 @@ class CounselingApply(APIView):
         
         counseling_application.save()
         
+        prefer_timeslots = prefer_timeslots.split(',')
         # 타임슬롯 지정
         for timeslot in prefer_timeslots:
             counseling_prefer_timeslot = \
@@ -149,6 +150,7 @@ class CounselingApply(APIView):
             counseling_prefer_timeslot.save()
 
         # 상담분야 지정
+        prefer_fields = prefer_fields.split(',')
         for field in prefer_fields:
             counseling_prefer_field = \
                 CounselingPreferfield(
@@ -275,7 +277,7 @@ class CounselingApplications(APIView):
             counseling_preferfields = CounselingPreferfield.objects.filter(counseling_application=counseling_application['id'])
             counseling_application['counseling_preferfields'] = CounselingPreferfieldSerializer(counseling_preferfields, many=True).data
         
-        res['couseling_applications'] = counseling_applications
+        res['counseling_applications'] = counseling_applications
         
         return Response(res, status=status.HTTP_200_OK)
         
