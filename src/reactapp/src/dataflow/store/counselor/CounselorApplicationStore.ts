@@ -36,23 +36,6 @@ class CounselorApplicationStore {
         makeAutoObservable(this);
     }
 
-    // 조건 상관 없이 모든 신청을 가져옴
-    // 일단 구현했는데, 실질적으로 쓰지 않을 것 (상담사가 상담신청 목록을 보는 페이지 (AdminApplicationCheckPage)에서는 아직 처리되지 않은 상담신청만 보여줄 예정이기 때문)
-    fetchCouselingApplications = () => {
-        remote
-            .get("counseling/applications/")
-            .onSuccess((json: any) => {
-                const couselingApplications: ICounselingApplicationDetail[] = json.counseling_applications;
-                this.counselingApplications = couselingApplications;
-                console.log(couselingApplications);
-            })
-            .onFailed((code: number, msg?: string) => {
-                console.log(code);
-                if (msg) console.log(msg);
-            })
-            .send();
-    }
-
     // 이미 승인되거나 거절되지 않은 상담신청만 가져옴 (아직 처리되지 않은 상담신청)
     // 상담사가 상담신청 목록을 보는 페이지 (AdminApplicationCheckPage) 에서 필터링되지 않은 초기 데이터를 가져올 때 사용
     fetchUnprocessedCouselingApplications = () => {
