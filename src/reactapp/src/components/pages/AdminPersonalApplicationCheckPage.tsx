@@ -117,7 +117,7 @@ const AdminPersonalApplicationCheckPage = observer(() => {
 
   useEffect(() => {
     const currentId = extractIdFromUrl();
-    counselorApplicationStore.fetchhCurrentApplication(currentId);
+    counselorApplicationStore.fetchhCurrentApplication(currentId, () => {});
   }, []);
 
   const PageDescription = observer(() => {

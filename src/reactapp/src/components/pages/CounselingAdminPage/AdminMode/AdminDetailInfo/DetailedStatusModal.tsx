@@ -67,7 +67,7 @@ const DetailedStatusModal: FC<DetailedStatusProps> = ({
               setPublicCaption={setPublicCaption}
             />
           ) : (
-            <ModalInfo studentInfo={studentInfo} />
+            <ModalInfo studentInfo={studentInfo} applicationId={selectedDetail?.id ?? -1} />
           )}
         </ModalBody>
         {isCaptionMode ? (
