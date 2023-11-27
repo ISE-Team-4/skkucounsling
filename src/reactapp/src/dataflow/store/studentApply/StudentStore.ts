@@ -3,6 +3,7 @@ import { remote } from "../../remote/RemoteSource";
 import { IApplicationForm } from "../../interface/counseling";
 import { makeAutoObservable } from "mobx";
 import { toJS } from "mobx";
+import { fetchFileWithQuery } from "../../remote/RemoteInstruct";
 class StudentStore {
   application!: IApplicationForm;
   applicationContent!: string;
@@ -40,20 +41,9 @@ class StudentStore {
   };
 
   fetchApplicationFile = () => {
-    const downloadLink = document.createElement("a");
-    const protocol = window.location.href.split("://")[0];
-    const currentUrl = window.location.href
-      .split("://")[1]
-      .split("/")[0]
-      .replace("3000", "8000");
-    downloadLink.href =
-      protocol +
-      "://" +
-      currentUrl +
-      `/counseling/application-file?application_id=${this.application.id}`;
-    document.body.appendChild(downloadLink);
-    downloadLink.click();
-    document.body.removeChild(downloadLink);
+    fetchFileWithQuery(
+      `/counseling/application-file?application_id=${this.application.id}`
+    );
   };
 }
 
