@@ -563,3 +563,14 @@ class CounselingApplicationFile(APIView):
             
         
         return FileResponse(open(str(application_file), 'rb'), status=status.HTTP_200_OK)
+    
+
+class CounselingTemplateFile(APIView):
+    def get(self, request, *args, **kwargs):
+        application_file = "application/application_template_file.docx"
+        try:
+            open(str(application_file))
+        except:
+            return Response({"error" : "파일이 존재하지 않습니다."}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            
+        return FileResponse(open(str(application_file), 'rb'), status=status.HTTP_200_OK)
