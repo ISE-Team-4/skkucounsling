@@ -26,5 +26,6 @@ urlpatterns = [
     
     # 공통
     path('application-file/',views.CounselingApplicationFile.as_view(),name='application-file'),
-    path('application-template-file/',views.CounselingTemplateFile.as_view(),name='application-template-file')
+    path('application-template-docx-file/',views.CounselingTemplateDocxFile.as_view(),name='application-template-docx-file'),
+    path('application-template-hwp-file/',views.CounselingTemplateHwpFile.as_view(),name='application-template-hwp-file')
 ]
