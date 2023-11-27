@@ -6,6 +6,9 @@ import { ICounselingApplicationDetail } from "../../interface/counselingApplicat
 class CounselorApplicationStore {
   counselingApplications: ICounselingApplicationDetail[] = [];
 
+  private afterSuccessApplications: (() => void) | null = null;
+  private afterSuccessCurrent: (() => void) | null = null;
+
   applicationApproval: {
     application_id: number;
     session_date: string;
@@ -82,14 +85,17 @@ class CounselorApplicationStore {
 
   // 조건 상관 없이 모든 신청을 가져옴
   // 일단 구현했는데, 실질적으로 쓰지 않을 것 (상담사가 상담신청 목록을 보는 페이지 (AdminApplicationCheckPage)에서는 아직 처리되지 않은 상담신청만 보여줄 예정이기 때문)
-  fetchCouselingApplications = () => {
+  fetchCouselingApplications = (afterSuccessApplications: () => void) => {
+    this.afterSuccessApplications = afterSuccessApplications;
     remote
       .get("counseling/applications/")
       .onSuccess((json: any) => {
         const couselingApplications: ICounselingApplicationDetail[] =
           json.counseling_applications;
         this.counselingApplications = couselingApplications;
-        console.log(couselingApplications);
+        if (this.afterSuccessApplications) {
+          this.afterSuccessApplications();
+        }
       })
       .onFailed((code: number, msg?: string) => {
         console.log(code);
@@ -110,7 +116,6 @@ class CounselorApplicationStore {
               !application.denied && !application.approved
           );
         this.counselingApplications = couselingApplications;
-        // console.log(couselingApplications);
       })
       .onFailed((code: number, msg?: string) => {
         console.log(code);
@@ -171,7 +176,6 @@ class CounselorApplicationStore {
         }
 
         this.counselingApplications = filteredByTimeSlot;
-        // console.log(filteredByTimeSlot);
       })
       .onFailed((code: number, msg?: string) => {
         console.log(code);
@@ -182,7 +186,8 @@ class CounselorApplicationStore {
 
   // 신청서의 id를 받고, 해당 신청서 데이터만 가져옴
   // 상담사가 개별 상담신청을 조회하는 페이지 'AdminPersonalApplicationCheckPage'에 사용
-  fetchhCurrentApplication = (applicationId: number) => {
+  fetchhCurrentApplication = (applicationId: number, afterSuccessCurrent: () => void) => {
+    this.afterSuccessCurrent = afterSuccessCurrent;
     remote
       .get("counseling/applications/")
       .onSuccess((json: any) => {
@@ -193,7 +198,9 @@ class CounselorApplicationStore {
           );
         this.currentApplication = currentApplication[0];
         this.applicationApproval.application_id = applicationId;
-        console.log(currentApplication);
+        if (this.afterSuccessCurrent) {
+          this.afterSuccessCurrent();
+        }
       })
       .onFailed((code: number, msg?: string) => {
         console.log(code);
