@@ -565,12 +565,32 @@ class CounselingApplicationFile(APIView):
         return FileResponse(open(str(application_file), 'rb'), status=status.HTTP_200_OK)
     
 
-class CounselingTemplateFile(APIView):
+class CounselingTemplateDocxFile(APIView):
     def get(self, request, *args, **kwargs):
-        application_file = "application/application_template_file.docx"
+        application_docx_file = "application/application_template_file.docx"
+
         try:
-            open(str(application_file))
+            open(str(application_docx_file))
+
         except:
             return Response({"error" : "파일이 존재하지 않습니다."}, status=status.HTTP_406_NOT_ACCEPTABLE)
             
-        return FileResponse(open(str(application_file), 'rb'), status=status.HTTP_200_OK)
+        #I want to send both files at once using FileResponse
+        return FileResponse(open(str(application_docx_file), 'rb'), status=status.HTTP_200_OK)
+    
+class CounselingTemplateHwpFile(APIView):
+    def get(self, request, *args, **kwargs):
+
+        application_hwp_file = "application/application_template_file.hwp"
+
+        try:
+
+            open(str(application_hwp_file))
+        except:
+            return Response({"error" : "파일이 존재하지 않습니다."}, status=status.HTTP_406_NOT_ACCEPTABLE)
+            
+        #I want to send both files at once using FileResponse
+        return FileResponse(open(str(application_hwp_file), 'rb'), status=status.HTTP_200_OK)
+    
+
+    
