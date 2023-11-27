@@ -30,6 +30,7 @@ import { useDisclosure } from "@chakra-ui/react";
 import { useNavigate } from "react-router";
 import { studentApplyStore } from "../../dataflow/store";
 import { APPLY_FIELD } from "../../dataflow/store/studentApply/StudentApplyStore";
+import { fetchFileWithQuery } from "../../dataflow/remote/RemoteInstruct";
 
 const StudentApplyPage = observer(() => {
   let today = new Date();
@@ -413,10 +414,7 @@ const StudentApplyPage = observer(() => {
         <HStack style={{ alignItems: "center", backgroundColor: "white" }}>
           <Button
             onClick={() =>
-              handleDownload(
-                "../../resources/application/Counseling_Sincheong_File.docx",
-                "Counseling_Sincheong_File.docx"
-              )
+              fetchFileWithQuery("/counseling/application-template-docx-file")
             }
             size="sm"
             leftIcon={<DownloadIcon />}
@@ -426,10 +424,7 @@ const StudentApplyPage = observer(() => {
           </Button>
           <Button
             onClick={() =>
-              handleDownload(
-                "../../resources/application/Counseling_Sincheong_File.hwp",
-                "Counseling_Sincheong_File.hwp"
-              )
+              fetchFileWithQuery("/counseling/application-template-hwp-file")
             }
             size="sm"
             leftIcon={<DownloadIcon />}
