@@ -48,7 +48,7 @@ const DetailedStatusModal: FC<DetailedStatusProps> = ({
   return (
     <Modal isOpen={isOpen} onClose={onClose} size="xl">
       <ModalOverlay/>
-      <ModalContent>
+      <ModalContent style={{ maxHeight: "80vh", overflowY: "auto" }}>
         <ModalHeader>
           {selectedDetail?.student.user.username} 학생
           {" "}
@@ -67,7 +67,7 @@ const DetailedStatusModal: FC<DetailedStatusProps> = ({
               setPublicCaption={setPublicCaption}
             />
           ) : (
-            <ModalInfo studentInfo={studentInfo} applicationId={selectedDetail?.id ?? -1} />
+            <ModalInfo applicationId={selectedDetail?.id ?? -1} />
           )}
         </ModalBody>
         {isCaptionMode ? (

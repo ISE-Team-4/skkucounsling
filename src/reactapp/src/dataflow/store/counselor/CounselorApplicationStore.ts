@@ -186,16 +186,18 @@ class CounselorApplicationStore {
 
   // 신청서의 id를 받고, 해당 신청서 데이터만 가져옴
   // 상담사가 개별 상담신청을 조회하는 페이지 'AdminPersonalApplicationCheckPage'에 사용
-  fetchhCurrentApplication = (applicationId: number, afterSuccessCurrent: () => void) => {
+  fetchhCurrentApplication = (
+    applicationId: number,
+    afterSuccessCurrent: () => void
+  ) => {
     this.afterSuccessCurrent = afterSuccessCurrent;
     remote
       .get("counseling/applications/")
       .onSuccess((json: any) => {
-        const currentApplication: ICounselingApplicationDetail[] =
-          json.counseling_applications.filter(
-            (application: ICounselingApplicationDetail) =>
-              application.id == applicationId
-          );
+        const currentApplication = json.counseling_applications.filter(
+          (application: ICounselingApplicationDetail) =>
+            application.id == applicationId
+        );
         this.currentApplication = currentApplication[0];
         this.applicationApproval.application_id = applicationId;
         if (this.afterSuccessCurrent) {
@@ -204,7 +206,7 @@ class CounselorApplicationStore {
       })
       .onFailed((code: number, msg?: string) => {
         console.log(code);
-        if (msg) console.log(msg);
+        if (msg) alert(code + " " + msg);
       })
       .send();
   };

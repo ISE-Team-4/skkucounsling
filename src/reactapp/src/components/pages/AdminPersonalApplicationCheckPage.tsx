@@ -17,6 +17,7 @@ import RefuseModal from "./RefuseModal";
 import { counselorApplicationStore } from "../../dataflow/store/counselor/CounselorApplicationStore";
 import { DownloadIcon } from "@chakra-ui/icons";
 import { useNavigate } from "react-router";
+import { transferBirth } from "../../dataflow/DateFunc";
 
 const AdminPersonalApplicationCheckPage = observer(() => {
   const [isAcceptModalOpen, setIsAcceptModalOpen] = useState(false);
@@ -222,14 +223,13 @@ const AdminPersonalApplicationCheckPage = observer(() => {
                 .student_number
             }
           </Text>
-          {/* 학년과 이메일 정보가 API에 없어서 구현 불가. */}
           <Text marginTop={1} fontSize="smaller" fontWeight="600">
             이메일 :{" "}
             {counselorApplicationStore.currentApplication.student.user.email}
           </Text>
           <Text marginTop={1} fontSize="smaller" fontWeight="600">
             생년월일 :{" "}
-            {counselorApplicationStore.currentApplication.student.user.birth}
+            {transferBirth(counselorApplicationStore.currentApplication.student.user.birth)}
           </Text>
           <Text marginTop={1} fontSize="smaller" fontWeight="600">
             연락처 :{" "}

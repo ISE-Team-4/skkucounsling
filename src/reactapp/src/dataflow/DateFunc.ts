@@ -46,6 +46,22 @@ const formattedTimeslot = (timeslot: string) => {
   return `${day}, ${hour}시`;
 };
 
+const transferBirth = (birth: string) => {
+  if (birth.length === 6) {
+    const year = birth.substring(0, 2);
+    const month = birth.substring(2, 4);
+    const day = birth.substring(4, 6);
+
+    const startYear = parseInt(year, 10);
+    const century = startYear >= 0 && startYear <= 22 ? 2000 : 1900;
+
+    const formattedDate = `${century + startYear}-${month}-${day}`;
+
+    return formattedDate;
+  }
+  return birth;
+}
+
 export {
   compareDateOnly,
   numToDateString,
@@ -54,4 +70,5 @@ export {
   formattedTimeslot,
   stringToDate,
   stringToKrString,
+  transferBirth,
 };
